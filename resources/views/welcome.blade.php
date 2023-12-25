@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
+    @extends('layout')
+    @section('title', 'Home')
+    @section('content')
     <style>
         .btn-pressed {
             background-color: #ff6347; /* Change this to your desired color */
@@ -82,6 +86,7 @@
         }
     }
 </script>
+@endsection
 
 </body>
 </html>
