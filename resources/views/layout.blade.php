@@ -10,7 +10,7 @@
 
 <body class="font-sans bg-gray-100">
 
-    <nav class="bg-gray-500 p-4 text-white">
+    <nav class="bg-blue-500 p-4 text-black">
         <div class="container mx-auto">
             <a href="{{ route('home') }}" class="hover:underline">Home</a>
             <a href="{{ route('about') }}" class="hover:underline ml-4">About</a>

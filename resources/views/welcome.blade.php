@@ -97,7 +97,16 @@
         }
     }
     </script>
+    <form action="{{ route('scrape.houses') }}" method="post">
+    @csrf
+    <label for="postcode">Postcode:</label>
+    <input type="text" name="postcode" required>
 
+    <label for="radius">Radius:</label>
+    <input type="text" name="radius" required>
+
+    <button type="submit">Scrape Houses</button>
+    </form>
     @endsection
 
 </body>
