@@ -14,57 +14,72 @@
 <body class="bg-gray-100 font-sans">
 
 <div class="container mx-auto p-4">
+    <div>
+        <label for="latitude">Latitude:</label>
+        <input type="text" id="latitude" placeholder="Enter Latitude">
+    </div>
+    <div>
+        <label for="longitude">Longitude:</label>
+        <input type="text" id="longitude" placeholder="Enter Longitude">
+    </div>
     <button onclick="getLocation()" id="locationButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
         Get Location
     </button>
 
     <p id="demo" class="mt-4"></p>
+    <div id="postalCode" class="mt-2"></div>
 </div>
 
 <script>
     function getLocation() {
         var locationButton = document.getElementById("locationButton");
+        var latitudeInput = document.getElementById("latitude");
+        var longitudeInput = document.getElementById("longitude");
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition, showError);
-            locationButton.classList.add("btn-pressed");
+        // Check if latitude and longitude inputs are not empty
+        if (latitudeInput.value && longitudeInput.value) {
+            const latitude = parseFloat(latitudeInput.value);
+            const longitude = parseFloat(longitudeInput.value);
+
+            document.getElementById("demo").innerHTML = `
+                <strong>Latitude:</strong> ${latitude}<br>
+                <strong>Longitude:</strong> ${longitude}
+            `;
+
+            const apiUrl = `https://api.postcodes.io/postcodes?lon=${longitude}&lat=${latitude}`;
+            console.log('API URL:', apiUrl);
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    displayPostalCode(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching postal code data:', error);
+                    document.getElementById("postalCode").innerHTML = "Error fetching postal code data. See console for details.";
+                });
         } else {
-            document.getElementById("demo").innerHTML = "Geolocation is not supported by this browser.";
+            document.getElementById("demo").innerHTML = "Please enter both latitude and longitude.";
         }
     }
 
-    function showPosition(position) {
-        var latitude = position.coords.latitude;
-        var longitude = position.coords.longitude;
+    function displayPostalCode(data) {
+        const postalCodeElement = document.getElementById("postalCode");
 
-        document.getElementById("demo").innerHTML = `
-            <strong>Latitude:</strong> ${latitude}<br>
-            <strong>Longitude:</strong> ${longitude}
-        `;
+        // Log the entire data object
+        console.log("Full API Response:", data);
 
-        // You can use the obtained coordinates to display the user's location on a map or perform other actions.
-    }
+        // Check if data.result is not null and is an array
+        if (data.result && Array.isArray(data.result) && data.result.length > 0) {
+            // Create a string with information for each result
+            const resultsString = data.result.map(result => {
+                return `<strong>postcode:</strong> ${result.postcode}<br>`;
+            }).join('');
 
-    function showError(error) {
-        var locationButton = document.getElementById("locationButton");
-
-        switch(error.code) {
-            case error.PERMISSION_DENIED:
-                document.getElementById("demo").innerHTML = "User denied the request for Geolocation.";
-                break;
-            case error.POSITION_UNAVAILABLE:
-                document.getElementById("demo").innerHTML = "Location information is unavailable.";
-                break;
-            case error.TIMEOUT:
-                document.getElementById("demo").innerHTML = "The request to get user location timed out.";
-                break;
-            case error.UNKNOWN_ERROR:
-                document.getElementById("demo").innerHTML = "An unknown error occurred.";
-                break;
+            postalCodeElement.innerHTML = resultsString;
+        } else {
+            postalCodeElement.innerHTML = "Postal code data not available.";
         }
-
-        // Remove the pressed style on error
-        locationButton.classList.remove("btn-pressed");
     }
 </script>
 
