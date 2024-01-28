@@ -1,6 +1,6 @@
 {
     "private": true,
-    "type": "module",
+    "type": "commonjs",
     "scripts": {
         "dev": "npm run development",
         "development": "mix",
@@ -17,7 +17,12 @@
         "vite": "^5.0.0"
     },
     "dependencies": {
+        "@scrapeit-cloud/scrapeit-cloud-node-sdk": "^1.0.5",
         "bootstrap": "^5.3.2",
-        "cheerio": "^1.0.0-rc.12"
+        "cheerio": "^1.0.0-rc.12",
+        "chromedriver": "^121.0.0",
+        "puppeteer": "^21.9.0",
+        "selenium": "^2.20.0",
+        "selenium-webdriver": "^4.17.0"
     }
 }
